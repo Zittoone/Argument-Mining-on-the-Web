@@ -23,3 +23,9 @@ Develop a tool for visualizing these datasets such that:
 - Write  a  report  (min.  2  pages – max.  5  pages)  with  all  the  details  about  the implementation and the obtained results.
 
 ## Course
+
+## Authors
+
+- Alexis Couvreur
+- Thomas Gauthier
+- Alexandre Gréau
