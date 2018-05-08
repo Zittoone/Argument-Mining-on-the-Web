@@ -6,13 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="js/dataExtractor.js"></script>
+    <script src="js/main.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css" media="all"/>
     <title>Argument Mining on the Web</title>
 </head>
-<body>
+<body>        
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-8">titre</div>
+            <div class="col-11 col-md-8">titre</div>
+            <div class="col-1">
+                    <button class="btn btn-primary"> Treat</button></div>
         </div>
         <div class="row">
             <div id="text" class="col-md-8 col-sm-12 border-right border-top">
@@ -41,6 +45,13 @@
                     </div>
                     <div class="col-11 legend-value">Content</div>
                 </div>
+                <div class="dropdown">
+                        <button onclick="dropDwnFunction()" class="dropbtn">Dropdown</button>
+                          <div id="dropdown" class="dropdown-content">
+                            <input type="text" placeholder="Search.." id="searchInput" onkeyup="filterFunction()">
+                            <a href="#about">Ajouter les essays</a>
+                          </div>
+                        </div>
             </div>
         </div>
     </div>
