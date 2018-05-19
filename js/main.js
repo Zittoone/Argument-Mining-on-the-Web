@@ -1,27 +1,32 @@
+let reader
+
 
 window.onload = init;
 
 
-function init(){
+function init() {
     console.log("page chargee");
-
 }
 
-function dropDwnFunction() {
-    document.getElementById("dropdown").classList.toggle("show");
-}
 
-function filterFunction() {
-    var input, filter, ul, li, a, i;
-    input = document.getElementById("searchInput");
-    filter = input.value.toUpperCase();
-    div = document.getElementById("dropdown");
-    a = div.getElementsByTagName("a");
-    for (i = 0; i < a.length; i++) {
-        if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
-            a[i].style.display = "";
-        } else {
-            a[i].style.display = "none";
+function printdoc() {
+
+    var files = document.getElementById('files').files;
+    if (!files.length) {
+        alert('Please select a file!');
+        return;
+    }
+
+    var file = files[0];
+    var start = 0;
+    var stop = file.size - 1;
+
+    var reader = new FileReader();
+    reader.onloadend = function(evt) {
+        if (evt.target.readyState == FileReader.DONE) { // DONE == 2
+          document.getElementById('byte_content').textContent = evt.target.result;
         }
     }
+    var blob = file.slice(start, stop + 1);
+    reader.readAsBinaryString(blob);
 }

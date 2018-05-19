@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-    <script src="js/dataExtractor.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
     <script src="js/main.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="style.css" media="all" />
     <title>Argument Mining on the Web</title>
 </head>
-<body>        
+
+<body>
     <div class="container">
         <div class="row">
             <div class="col-11 col-md-8">titre</div>
             <div class="col-1">
-                    <button class="btn btn-primary"> Treat</button></div>
+                <button class="btn btn-primary" id="treat" onclick="printdoc()"> Treat</button>
+            </div>
         </div>
         <div class="row">
             <div id="text" class="col-md-8 col-sm-12 border-right border-top">
-                texte
+                <output id="texte"></output>
+                <div id="byte_content"></div>
             </div>
             <div class="col-md-4 col-sm-12">
                 <div class="legend">Légende :</div>
@@ -32,28 +37,32 @@
                     <div class="col-11 legend-value">Pas content</div>
                 </div>
                 <div class="legend-element row">
-                        <div class="col-1">
+                    <div class="col-1">
                         <div class="legend-color orange">
                         </div>
                     </div>
                     <div class="col-11 collegend-value">Moyen content</div>
                 </div>
                 <div class="legend-element row">
-                        <div class="col-1">
+                    <div class="col-1">
                         <div class="legend-color green">
                         </div>
                     </div>
                     <div class="col-11 legend-value">Content</div>
                 </div>
-                <div class="dropdown">
-                        <button onclick="dropDwnFunction()" class="dropbtn">Dropdown</button>
-                          <div id="dropdown" class="dropdown-content">
-                            <input type="text" placeholder="Search.." id="searchInput" onkeyup="filterFunction()">
-                            <a href="#about">Ajouter les essays</a>
-                          </div>
-                        </div>
+                <input type="file" id="files" name="file" /> 
+                 <!--<div class="dropdown">
+                    <button onclick="dropDwnFunction()" class="dropbtn">Dropdown</button>
+                    <div id="dropdown" class="dropdown-content" aria-labelledby="dropdownMenu2">
+                       <input type="text" placeholder="Search.." id="searchInput" onkeyup="filterFunction()">
+                        <button class="dropdown-item" type="button" onclick="printDoc('text1.txt')">Action</button>
+                        <button class="dropdown-item" type="button">Another action</button>
+                        <button class="dropdown-item" type="button">Something else here</button>
+                    </div>-->
+                </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>
