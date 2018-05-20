@@ -17,15 +17,14 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-11 col-md-8">titre</div>
+            <div class="col-11 col-md-8" id='titre'>titre</div>
             <div class="col-1">
-                <button class="btn btn-primary" id="treat" onclick="printdoc()"> Treat</button>
+                <button class="btn btn-primary" id="treat"> Treat</button>
             </div>
         </div>
         <div class="row">
             <div id="text" class="col-md-8 col-sm-12 border-right border-top">
-                <output id="texte"></output>
-                <div id="byte_content"></div>
+                <div id="textOutput"></div>
             </div>
             <div class="col-md-4 col-sm-12">
                 <div class="legend">Légende :</div>
@@ -50,19 +49,28 @@
                     </div>
                     <div class="col-11 legend-value">Content</div>
                 </div>
-                <input type="file" id="files" name="file" /> 
-                 <!--<div class="dropdown">
-                    <button onclick="dropDwnFunction()" class="dropbtn">Dropdown</button>
-                    <div id="dropdown" class="dropdown-content" aria-labelledby="dropdownMenu2">
-                       <input type="text" placeholder="Search.." id="searchInput" onkeyup="filterFunction()">
-                        <button class="dropdown-item" type="button" onclick="printDoc('text1.txt')">Action</button>
-                        <button class="dropdown-item" type="button">Another action</button>
-                        <button class="dropdown-item" type="button">Something else here</button>
-                    </div>-->
+                <!-- browse text button-->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" type="button" onclick="printdoc('txt')">Show</button>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="txtFiles">
+                        <label class="custom-file-label" for="txtFiles" id="txtFilesLabel">Choose txt file</label>
+                    </div>
+                </div>
+                <!-- browse ann button-->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" type="button" onclick="printdoc('ann')">Show</button>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="annFiles">
+                        <label class="custom-file-label" for="annFiles" id="annFilesLabel">Choose ann file</label>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>

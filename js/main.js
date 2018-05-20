@@ -1,5 +1,5 @@
 let reader
-
+let files,elemID,labelID
 
 window.onload = init;
 
@@ -9,24 +9,42 @@ function init() {
 }
 
 
-function printdoc() {
+function printdoc(type) {
 
-    var files = document.getElementById('files').files;
+    if (type == 'txt'){
+        elemID = 'txtFiles';
+    }else if (type == 'ann'){
+        elemID = 'annFiles';
+    }
+    labelID = elemID + 'Label';
+
+    files = document.getElementById(elemID).files;
     if (!files.length) {
         alert('Please select a file!');
         return;
     }
 
     var file = files[0];
-    var start = 0;
-    var stop = file.size - 1;
-
     var reader = new FileReader();
     reader.onloadend = function(evt) {
         if (evt.target.readyState == FileReader.DONE) { // DONE == 2
-          document.getElementById('byte_content').textContent = evt.target.result;
+          document.getElementById('textOutput').textContent = evt.target.result;
         }
+        document.getElementById(labelID).textContent = file.name
+        document.getElementById("titre").textContent = file.name
     }
-    var blob = file.slice(start, stop + 1);
-    reader.readAsBinaryString(blob);
+    reader.readAsText(file);
+}
+
+function annotate(text){
+    // retrieve .ann in var []
+    // analyse 
+}
+
+function retrieve (title){
+    // search for title
+}
+
+function colorize(){
+    // change color of text
 }
