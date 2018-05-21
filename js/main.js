@@ -5,6 +5,7 @@ window.onload = init;
 
 
 //let regex1 = new RegExp();
+var regex2 = new RegExp('\\s');
 
 
 function init() {
@@ -60,21 +61,26 @@ function retrieveIndexes() {
         // premiere partie de ligne = ID
         // deuxieme partie = couleur
         // troisieme partie = range
-        if (lines[line][0] == 'T') {
-            parts[line] = lines[line].split('	', 2);
-            parts[line][1] = parts[line][1].split(' ');
-        } else if (lines[line][0] == 'A') {
-
+        var temp = lines[line][0]
+        if (temp == 'T') {
+            parts[line] = lines[line].split(regex2, 4);
+        } else if (temp == 'A') {
+            parts[line] = lines[line].split(regex2, 4 );
+        } else if (temp == 'R'){
+            parts[line] = lines[line].split(regex2, 4 );
+            /* for (var i = 0; i < parts[line].length ; i++){
+                  console.log(parts[line][i])
+              }
+              */
         }
-
         console.log(' end line')
-
     }
 
 
 }
 
-function colorize(type, range) {
+function colorize() {
+    // receive parts[line] and colorize depending of type and index
     // change color of text
 
 }
