@@ -42,8 +42,9 @@ function onFileChange(source) {
         document.getElementById(source.id + "Label").textContent = file.name
         source.textContent = file.name;
 
-        let ext = file.name.split(".");
-        ext = ext[ext.length - 1];
+        let fileSplit = file.name.split(".");
+        let name = fileSplit[0];
+        let ext = fileSplit[fileSplit.length - 1];
 
         readFile(file, (event) => {
             if(ext == "ann") {
@@ -52,6 +53,7 @@ function onFileChange(source) {
                 processPlainText(event.target.result);
             }
             processContent();
+            document.getElementById("titre").textContent = name;
         });
 
     } else {
@@ -140,5 +142,5 @@ function readFile(file, callback) {
  * else both red
  */
 function colorizeInputs() {
-    
+
 }
