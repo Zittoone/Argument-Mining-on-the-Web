@@ -33,7 +33,7 @@ function init() {
     let text = document.createTextNode("Graph tool >>");
     a.appendChild(text);
     a.title = "graph tool";
-    a.href = staticUrl + "node.html";
+    a.href = staticUrl + "NoDE.html";
     nodeLink.appendChild(a);
 
     // parts [line] [ID,type,indexDebut,indexFin]
