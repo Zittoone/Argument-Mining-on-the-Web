@@ -16,6 +16,11 @@ if (!String.prototype.splice) {
     };
 }
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
 let texte, annotated;
 let wsRegex = new RegExp("\\s+");
 
@@ -39,11 +44,11 @@ function init() {
     // parts [line] [ID,type,indexDebut,indexFin]
 }
 
-let labels = {"txtFiles":"Choisir le fichier texte", "annFiles":"Choisir le fichier annoté"};
+let labels = { "txtFiles": "Choisir le fichier texte", "annFiles": "Choisir le fichier annoté" };
 
 function onFileChange(source) {
 
-    if(source.files.length > 0) {
+    if (source.files.length > 0) {
 
         let file = source.files[0];
 
@@ -55,9 +60,9 @@ function onFileChange(source) {
         let ext = fileSplit[fileSplit.length - 1];
 
         readFile(file, (event) => {
-            if(ext == "ann") {
+            if (ext == "ann") {
                 processAnnotatedText(event.target.result);
-            } else if(ext == "txt") {
+            } else if (ext == "txt") {
                 processPlainText(event.target.result);
             }
             source.disabled = true;
@@ -76,19 +81,19 @@ function processAnnotatedText(text) {
     annotated = text.split("\n");
 
     // Check if last line is empty
-    if(annotated[annotated.length - 1] == "") {
+    if (annotated[annotated.length - 1] == "") {
         annotated.pop();
     }
 }
 
 function processPlainText(text) {
-    texte = text;
+    texte = text.replaceAll('\r', '');
 }
 
 var color = {
-    "Premise":"green",
-    "Claim":"orange",
-    "MajorClaim":"red"
+    "Premise": "green",
+    "Claim": "orange",
+    "MajorClaim": "red"
 }
 
 function processContent() {
@@ -96,7 +101,7 @@ function processContent() {
     colorizeInputs();
 
     // Process only if the buffers are loaded
-    if(annotated == undefined || texte == undefined) {
+    if (annotated == undefined || texte == undefined) {
         return;
     }
 
@@ -111,11 +116,11 @@ function processContent() {
 
     annotated.sort((a, b) => {
         console.log(a + " " + b);
-        if(!a[0].startsWith("T")) {
+        if (!a[0].startsWith("T")) {
             return -1;
         }
 
-        if(!b[0].startsWith("T")) {
+        if (!b[0].startsWith("T")) {
             return 1;
         }
         return a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0;
@@ -125,12 +130,13 @@ function processContent() {
     // texte.replace("\n", "");
     // texte.replace("\t", " ");
 
-    let start, end, type, offset = 0, pre, post;
-    for(let line = 0; line < annotated.length; line++) {
-        if(annotated[line][0].match("^(T)[0-9]+")) {
+    let start, end, type, offset = 0,
+        pre, post;
+    for (let line = 0; line < annotated.length; line++) {
+        if (annotated[line][0].match("^(T)[0-9]+")) {
 
             console.log(annotated[line])
-            //Set vars
+                //Set vars
             type = annotated[line][1];
 
             pre = "<span class='" + type.toLowerCase() + "'>";
@@ -164,7 +170,7 @@ function readFile(file, callback) {
  * else both red
  */
 function colorizeInputs() {
-    if ( texte == undefined || annotated == undefined){
+    if (texte == undefined || annotated == undefined) {
         document.getElementById('clearButton').disabled = true;
     } else {
         document.getElementById('clearButton').disabled = false;
@@ -173,7 +179,7 @@ function colorizeInputs() {
 
 function clear() {
     document.getElementById('clearButton').disabled = true;
-    for(let key in labels) {
+    for (let key in labels) {
         document.getElementById(key).disabled = false;
         document.getElementById(key).value = "";
         document.getElementById(key + "Label").textContent = labels[key];
