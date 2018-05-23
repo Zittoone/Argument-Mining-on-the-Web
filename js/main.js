@@ -28,6 +28,14 @@ function init() {
     annlines = [];
     parts = [];
 
+    let nodeLink = document.getElementById("nodeUrl");
+    let a = document.createElement('a');
+    let text = document.createTextNode("Graph tool >>");
+    a.appendChild(text);
+    a.title = "graph tool";
+    a.href = staticUrl + "node.html";
+    nodeLink.appendChild(a);
+
     // parts [line] [ID,type,indexDebut,indexFin]
 }
 
