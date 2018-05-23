@@ -71,7 +71,7 @@ body {
     margin-right: 25px;
 }
 
-#back {
+.navButton {
     padding-left: 10px;
     font-size: 20px;
 }
