@@ -86,3 +86,34 @@ body {
 .dropdown a:hover {background-color: #ddd}
 
 .show {display:block;}
+
+#buttons {
+    margin-top: 20px;
+}
+
+.nodeButtons {
+    padding-left: 20px;
+    padding-bottom: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#topics {
+    padding-left: 20px;
+}
+
+#nodeText {
+    padding-left: 20px;
+    margin-right: 25px;
+}
+
+#back {
+    padding-left: 10px;
+    font-size: 20px;
+}
+
+#textTitle {
+    padding-left : 15px;
+    font-size: 22px;
+    font-weight: bold;
+}
