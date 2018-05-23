@@ -1,141 +1,144 @@
-let reader, reader2;
-let files, file, elemID, labelID, slicedtxt, annlines;
-let parts;
+if (!String.prototype.splice) {
+    /**
+     * {JSDoc}
+     *
+     * The splice() method changes the content of a string by removing a range of
+     * characters and/or adding new characters.
+     *
+     * @this {String}
+     * @param {number} start Index at which to start changing the string.
+     * @param {number} delCount An integer indicating the number of old chars to remove.
+     * @param {string} newSubStr The String that is spliced in.
+     * @return {string} A new string with the spliced substring.
+     */
+    String.prototype.splice = function(start, delCount, newSubStr) {
+        return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+    };
+}
 
-let regex2 = new RegExp('\\s');
-let regex1 = new RegExp("T\\d\\d\*", "g"); // T suivi d'un nombre
+let texte, annotated;
+let wsRegex = new RegExp("\\s+");
 
 window.onload = init;
 
 function init() {
-    console.log("page chargee");
+    // console.log("page chargee");
     // remet tout a zero
     slicedtxt = [];
     annlines = [];
     parts = [];
+
     // parts [line] [ID,type,indexDebut,indexFin]
 }
 
-function annotate() {
-    // verify .ann is the same title as the mothafucking txt ya
-    // read txt file searching for these arguments mothafucka
-    // write in new file the colored txt
+let labels = {"txtFiles":"Choisir le fichier texte", "annFiles":"Choisir le fichier annoté"};
 
-    document.getElementById("titre").textContent = 'annotated doc';
-    // slicing
-    slicing(annlines);
-    txtSlicer();
+function onFileChange(source) {
 
-    let tempStr, start, end, type;
-    for (var aline = 0; aline < annlines.length; aline++) {
-        console.log(parts[aline])
+    if(source.files.length > 0) {
 
-        // specifier recherche aux 'T'
-        if (parts[aline][0] == regex1) { // bug
-            tempStr = '';
-            type = parts[aline][1]; //bug  idk anymore bruh
-            start = parseInt(parts[aline][2]);
-            end = parseInt(parts[aline][3]);
+        let file = source.files[0];
 
-            for (var j = start; j < end; j++) {
-                tempStr += slicedtxt[j];
+        document.getElementById(source.id + "Label").textContent = file.name
+        source.textContent = file.name;
+
+        let ext = file.name.split(".");
+        ext = ext[ext.length - 1];
+
+        readFile(file, (event) => {
+            if(ext == "ann") {
+                processAnnotatedText(event.target.result);
+            } else if(ext == "txt") {
+                processPlainText(event.target.result);
             }
-            colorize(tempStr, type)
-            slicedtxt.splice(start, end - start, tempStr);
-        }
+            processContent();
+        });
 
-    }
-
-    document.getElementById('textOutput').textContent = slicedtxt.join('')
-
-    console.log(document.getElementById('textOutput').textContent)
-    // print that mothafucka
-}
-
-function slicing(tab) {
-    reader = new FileReader();
-    reader.onloadend = function (evt) {
-        tab = this.result.split('\n');
-    }
-    for (var line = 0; line < tab.length; line++) {
-        // separer selon le genre (A,T,R)
-        var temp = tab[line][0]
-        if (temp == 'T') {
-            // ID, type, debut, fin
-            parts[line] = tab[line].split(regex2, 4);
-        } else if (temp == 'A') {
-            // ID1, stance, ID2, opinion
-            parts[line] = tab[line].split(regex2, 4);
-
-        } else if (temp == 'R') {
-            // ID, opinion, ID1, ID2
-            parts[line] = tab[line].split(regex2, 4);
-            /* for (var i = 0; i < parts[line].length ; i++){
-                  console.log(parts[line][i])
-              }
-            */
-        }
-    }
-    // donnes stockee dans parts
-}
-
-function txtSlicer() {
-    // decoupe tout les char pour pouvoir remplacer entre deux index
-    reader2 = new FileReader();
-    reader2.onloadend = function (evt) {
-        slicedtxt = this.result.split('');
+    } else {
+        document.getElementById(source.id + "Label").textContent = labels[source.id]
     }
 }
 
-function colorize(str, type) {
+function processAnnotatedText(text) {
 
-    if (type == 'Premise') {
-        // changer en vert
-        str.fontcolor("green");
+    // Split the text into lines
+    annotated = text.split("\n");
 
-    } else if (type == 'Claim') {
-        // changer couleur en orange
-        str.fontcolor("orange");
-
-    } else if (type == 'MajorClaim') {
-        // changer en rouge
-        str.fontcolor("red");
+    // Check if last line is empty
+    if(annotated[annotated.length - 1] == "") {
+        annotated.pop();
     }
 }
 
-function verifyDocs() {
-    // check if titles are the same
-
-    console.log("good mothafuckass");
+function processPlainText(text) {
+    texte = text;
 }
 
+var color = {
+    "Premise":"green",
+    "Claim":"orange",
+    "MajorClaim":"red"
+}
 
-function printdoc(type) {
+function processContent() {
 
-    if (type == 'txt') {
-        elemID = 'txtFiles';
-    } else if (type == 'ann') {
-        elemID = 'annFiles';
-    }
-    labelID = elemID + 'Label';
+    colorizeInputs();
 
-    files = document.getElementById(elemID).files;
-    if (!files.length) {
-        alert('Please select a file!');
+    // Process only if the buffers are loaded
+    if(annotated == undefined || texte == undefined) {
         return;
     }
 
-    file = files[0];
-    reader = new FileReader();
-    reader.onloadend = function (evt) {
-        if (evt.target.readyState == FileReader.DONE) { // DONE == 2
-            document.getElementById('textOutput').textContent = evt.target.result;
-        }
-        if (type == 'ann') {
-            annlines = this.result.split('\n');
-        }
-        document.getElementById(labelID).textContent = file.name
-        document.getElementById("titre").textContent = file.name
+    for (let line = 0; line < annotated.length; line++) {
+        annotated[line] = annotated[line].split(wsRegex, 4);
+        annotated[line][2] = parseInt(annotated[line][2]);
+        annotated[line][3] = parseInt(annotated[line][3]);
     }
+
+    annotated.sort((a, b) => {
+        return a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0;
+    })
+
+    // sanitize and slice text into char array
+    // texte.replace("\n", "");
+    // texte.replace("\t", " ");
+
+    let start, end, type, offset = 0;
+    for(let line = 0; line < annotated.length; line++) {
+        if(annotated[line][0].match("^(T)[0-9]+")) {
+
+            // console.log(annotated[line])
+            //Set vars
+            type = annotated[line][1];
+            start = annotated[line][2] + offset;
+            end = annotated[line][3] + offset;
+            offset += 22 + color[type].length;
+
+            console.log(annotated[line])
+            let tmp = texte.substring(start, end);
+            tmp = tmp.fontcolor(color[type]);
+
+            texte = texte.splice(start, end - start, tmp);
+        }
+    }
+
+    document.getElementById('textOutput').innerHTML = texte;
+}
+
+function readFile(file, callback) {
+    let reader = new FileReader();
+
+    reader.onload = callback;
+
     reader.readAsText(file);
+}
+
+/**
+ * If both undefined : default color
+ * Selecteds are green and non seleted orange
+ * If both inputs match : both green then lock them and activate clear button
+ * else both red
+ */
+function colorizeInputs() {
+
 }
