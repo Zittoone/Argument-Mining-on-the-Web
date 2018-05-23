@@ -55,7 +55,7 @@
                         <button class="btn btn-outline-secondary" type="button" onclick="printdoc('txt')">Show</button>
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="txtFiles">
+                        <input type="file" class="custom-file-input" id="txtFiles" oninput="printdoc('txt')" >
                         <label class="custom-file-label" for="txtFiles" id="txtFilesLabel">Choose txt file</label>
                     </div>
                 </div>
@@ -65,7 +65,7 @@
                         <button class="btn btn-outline-secondary" type="button" onclick="printdoc('ann')">Show</button>
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="annFiles">
+                        <input type="file" class="custom-file-input" id="annFiles" oninput="printdoc('ann')" >
                         <label class="custom-file-label" for="annFiles" id="annFilesLabel">Choose ann file</label>
                     </div>
                 </div>
