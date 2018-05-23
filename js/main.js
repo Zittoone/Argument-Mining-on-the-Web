@@ -88,6 +88,7 @@ function processAnnotatedText(text) {
 
 function processPlainText(text) {
     texte = text.replaceAll('\r', '');
+    texte = text.replaceAll('\n', '');
 }
 
 var color = {
