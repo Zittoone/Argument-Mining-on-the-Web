@@ -40,7 +40,7 @@ function getTopic(filename) {
     xmlDoc = parser.parseFromString(text,"text/xml");
 
     let pairs = xmlDoc.getElementsByTagName("pair");
-    for (i = 0; i < pairs.length; i++) { 
+    for (let i = 0; i < pairs.length; i++) { 
         let topic = pairs[i].getAttribute("topic");
         if (!topics.includes(topic)) {
             topics.push(topic);
@@ -64,7 +64,7 @@ function constructNodes(filename, topic) {
     let hypothesisFound = false;
 
     let pairs = xmlDoc.getElementsByTagName("pair");
-    for (i = 0; i < pairs.length; i++) { 
+    for (let i = 0; i < pairs.length; i++) { 
         let readTopic = pairs[i].getAttribute("topic");
         if (readTopic == topic) {
             test++;
@@ -89,11 +89,12 @@ function drawGraph() {
     let graph = new Springy.Graph();
 
     //Adding nodes
-    for(i = 0; i < nodes.length; i++) {
+    for(let i = 0; i < nodes.length; i++) {
+        let nodeText = nodes[i].text;
         let node = graph.newNode({
             label: nodes[i].id,
             ondoubleclick: function() {
-                console.log(nodes[i].text);
+                alert(nodeText);
             }
         });
 
@@ -101,14 +102,14 @@ function drawGraph() {
     }
 
     //Adding edges
-    for(let x = 1; x < nodes.length; x++) {
+    for(let i = 1; i < nodes.length; i++) {
         let currentNode, fatherNode, color;
 
-        currentNode = graphNodes[x];
-        fatherNode = graphNodes[getNodeGraphIndex(nodes[x].fatherId)];
+        currentNode = graphNodes[i];
+        fatherNode = graphNodes[getNodeGraphIndex(nodes[i].fatherId)];
 
 
-        if (nodes[x].entailment == "YES") {
+        if (nodes[i].entailment == "YES") {
             edgeColor = '#7DBE3C'
         } else {
             edgeColor = '#FF0000';
@@ -127,7 +128,7 @@ function drawGraph() {
 
 function getNodeGraphIndex(id) {
     let index = -1;
-    for(i = 0; i < nodes.length; i++) {
+    for(let i = 0; i < nodes.length; i++) {
         if (nodes[i].id == id) {
             index = i;
         }
