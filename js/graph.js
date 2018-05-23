@@ -3,7 +3,7 @@ let nodes;
 let graphNodes;
 
 let fatherIds;
-let currentIds;
+let createdNodeIds;
 
 let DEBUG = false;
 
@@ -69,8 +69,8 @@ function getTopic(filename) {
             link.title = topic;
             link.href = 'javascript:constructNodes("' + filename + '", "' + topic + '");';
             textDiv.appendChild(link);
+            
             //Adding br
-
             let br = document.createElement('br');
             textDiv.appendChild(br);
 
@@ -84,14 +84,12 @@ function getTopic(filename) {
 function constructNodes(filename, topic) {
     nodes = [];
     fatherIds = [];
-    currentIds = [];
+    createdNodeIds = [];
 
     let file = staticUrl + filename;
     let text = readTextFile(file);
 
     let parser, xmlDoc;
-
-    let hypothesisFound = false;
 
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(text,"text/xml");    
@@ -106,45 +104,32 @@ function constructNodes(filename, topic) {
             let entailment = pairs[i].getAttribute("entailment");
 
             if (!fatherIds.includes(fatherId)) {
-                console.log("add :" + fatherId)
                fatherIds.push(fatherId);
             }
 
-            if (!currentIds.includes(id)) {
-                currentIds.push(id);
+            if (!createdNodeIds.includes(id)) {
+                createdNodeIds.push(id);
             }
-
-            
-            if (!hypothesisFound && pairs[i].childNodes[3].getAttribute("id") == "1") {
-                nodes.push(new Node("1", 
-                                    pairs[i].childNodes[3].childNodes[0].nodeValue
-                                ));
-                hypothesisFound = true;
-            }
-            
 
             nodes.push(new Node(id, text, fatherId, entailment));
         }
     }
 
-    //createHypothesis();
+    seekHypothesis(filename, topic);
 
+    console.log(nodes);
     drawGraph();
 }
 
-function createHypothesis() {
-    console.log(currentIds.length);
-    console.log(fatherIds.length)
-
+function seekHypothesis(filename, topic) {
     for (let i = 0; i < fatherIds.length; i++) {
-        console.log(fatherIds[i])
-        //if (!currentIds.include(fatherIds[i])) {
-            
-        //}
+        if (!createdNodeIds.includes(fatherIds[i])) {
+            createHypothesis(filename, topic, fatherIds[i]);
+        }
     }
 }
 
-function seekText(filename, topic, id) {
+function createHypothesis(filename, topic, id) {
     let file = staticUrl + filename;
     let text = readTextFile(file);
 
@@ -154,17 +139,20 @@ function seekText(filename, topic, id) {
     xmlDoc = parser.parseFromString(text,"text/xml"); 
 
     let pairs = xmlDoc.getElementsByTagName("pair");
+
     for (let i = 0; i < pairs.length; i++) { 
+
         let readTopic = pairs[i].getAttribute("topic");
 
-        if (readTopic == topic && pairs[i].childNodes[3].getAttribute("id") == id) {
-            nodes.push(new Node(pairs[i].childNodes[3].getAttribute("id"), 
-                                pairs[i].childNodes[3].childNodes[0].nodeValue
-            ));
+        if (readTopic == topic) {
+
+            if (pairs[i].childNodes[3].getAttribute("id") == id) {            
+                nodes.unshift(new Node(pairs[i].childNodes[3].getAttribute("id"), 
+                                    pairs[i].childNodes[3].childNodes[0].nodeValue
+                ));
+                return;
+            }
         }
-
-        return;
-
     }
 }
 
@@ -198,8 +186,6 @@ function drawGraph() {
             edgeColor = '#FF0000';
         }
 
-        console.log(currentNode == undefined)
-
         graph.newEdge(currentNode, fatherNode, {color: edgeColor});
     }
 
@@ -227,7 +213,6 @@ class Node {
         this.text = text;
         this.fatherId = fatherId;
         this.entailment = entailment;
-
     }
 }
 
