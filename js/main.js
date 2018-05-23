@@ -1,14 +1,16 @@
-let reader;
-let files, file, elemID, labelID, txtlines, annlines;
+let reader, reader2;
+let files, file, elemID, labelID, slicedtxt, annlines;
 let parts;
 
 let regex2 = new RegExp('\\s');
+let regex1 = new RegExp("T\\d\\d\*", "g"); // T suivi d'un nombre
 
 window.onload = init;
 
 function init() {
     console.log("page chargee");
-    txtlines = [];
+    // remet tout a zero
+    slicedtxt = [];
     annlines = [];
     parts = [];
     // parts [line] [ID,type,indexDebut,indexFin]
@@ -16,14 +18,37 @@ function init() {
 
 function annotate() {
     // verify .ann is the same title as the mothafucking txt ya
-    // slicing
     // read txt file searching for these arguments mothafucka
     // write in new file the colored txt
-    document.getElementById("titre").textContent = 'annotated doc';
 
+    document.getElementById("titre").textContent = 'annotated doc';
+    // slicing
     slicing(annlines);
-    printdoc('txt');
-    
+    txtSlicer();
+
+    let tempStr, start, end, type;
+    for (var aline = 0; aline < annlines.length; aline++) {
+        console.log(parts[aline])
+
+        // specifier recherche aux 'T'
+        if (parts[aline][0] == regex1) { // bug
+            tempStr = '';
+            type = parts[aline][1]; //bug  idk anymore bruh
+            start = parseInt(parts[aline][2]);
+            end = parseInt(parts[aline][3]);
+
+            for (var j = start; j < end; j++) {
+                tempStr += slicedtxt[j];
+            }
+            colorize(tempStr, type)
+            slicedtxt.splice(start, end - start, tempStr);
+        }
+
+    }
+
+    document.getElementById('textOutput').textContent = slicedtxt.join('')
+
+    console.log(document.getElementById('textOutput').textContent)
     // print that mothafucka
 }
 
@@ -38,7 +63,6 @@ function slicing(tab) {
         if (temp == 'T') {
             // ID, type, debut, fin
             parts[line] = tab[line].split(regex2, 4);
-
         } else if (temp == 'A') {
             // ID1, stance, ID2, opinion
             parts[line] = tab[line].split(regex2, 4);
@@ -52,11 +76,31 @@ function slicing(tab) {
             */
         }
     }
+    // donnes stockee dans parts
 }
 
-function colorize() {
-    // receive parts[line] and colorize depending of type and index
-    // change color of text
+function txtSlicer() {
+    // decoupe tout les char pour pouvoir remplacer entre deux index
+    reader2 = new FileReader();
+    reader2.onloadend = function (evt) {
+        slicedtxt = this.result.split('');
+    }
+}
+
+function colorize(str, type) {
+
+    if (type == 'Premise') {
+        // changer en vert
+        str.fontcolor("green");
+
+    } else if (type == 'Claim') {
+        // changer couleur en orange
+        str.fontcolor("orange");
+
+    } else if (type == 'MajorClaim') {
+        // changer en rouge
+        str.fontcolor("red");
+    }
 }
 
 function verifyDocs() {
@@ -87,7 +131,7 @@ function printdoc(type) {
         if (evt.target.readyState == FileReader.DONE) { // DONE == 2
             document.getElementById('textOutput').textContent = evt.target.result;
         }
-        if (type == 'ann'){
+        if (type == 'ann') {
             annlines = this.result.split('\n');
         }
         document.getElementById(labelID).textContent = file.name
