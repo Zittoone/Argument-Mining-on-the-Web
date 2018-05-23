@@ -202,7 +202,7 @@
     </pair>
     <pair task="ARG" id="51" topic="Abortion" entailment="NONENTAILMENT">
         <t id="16">Women should use contraceptives, not abortion, to avoid unwanted pregnancies. A Centers for Disease Control and Prevention (CDC) study showed that 19-25% of women who received abortions in 2006 had previously had one or more abortions.  If abortion were not available, women would use preventative measures.</t>
-        <h iid="15">Motherhood must never be a punishment for having sexual intercourse. President Barack Obama said during a Mar. 29, 2008 campaign speech in Johnston, Pennsylvania, "I have two daughters... I'm going to teach them first about values and morals, but if they make a mistake, I don't want them punished with a baby."</h>
+        <h id="15">Motherhood must never be a punishment for having sexual intercourse. President Barack Obama said during a Mar. 29, 2008 campaign speech in Johnston, Pennsylvania, "I have two daughters... I'm going to teach them first about values and morals, but if they make a mistake, I don't want them punished with a baby."</h>
     </pair>
     <pair task="ARG" id="52" topic="Abortion" entailment="NONENTAILMENT">
         <t id="17">Abortion increases the likelihood that women will develop breast cancer. </t>

@@ -50,10 +50,10 @@ function getTopic(filename) {
 
     let pairs = xmlDoc.getElementsByTagName("pair");
 
-    let textDiv = document.getElementById("text");
+    let topicDiv = document.getElementById("topics");
     //We remove topics of previous files
-    while (textDiv.firstChild) {
-        textDiv.removeChild(textDiv.firstChild);
+    while (topicDiv.firstChild) {
+        topicDiv.removeChild(topicDiv.firstChild);
       }
 
     for (let i = 0; i < pairs.length; i++) { 
@@ -68,11 +68,11 @@ function getTopic(filename) {
             link.appendChild(text);
             link.title = topic;
             link.href = 'javascript:constructNodes("' + filename + '", "' + topic + '");';
-            textDiv.appendChild(link);
+            topicDiv.appendChild(link);
             
             //Adding br
             let br = document.createElement('br');
-            textDiv.appendChild(br);
+            topicDiv.appendChild(br);
 
             if (DEBUG) {
                 console.log(topic);
@@ -117,7 +117,6 @@ function constructNodes(filename, topic) {
 
     seekHypothesis(filename, topic);
 
-    console.log(nodes);
     drawGraph();
 }
 
@@ -166,7 +165,7 @@ function drawGraph() {
         let node = graph.newNode({
             label: nodes[i].id,
             ondoubleclick: function() {
-                alert(nodeText);
+                writeText(this.label);
             }
         });
 
@@ -195,6 +194,14 @@ function drawGraph() {
           graph: graph
         });
       });
+}
+
+function writeText(id) {
+    let textDiv = document.getElementById("text");
+
+    let text = nodes[getNodeGraphIndex(id)].text;
+
+    textDiv.innerHTML = text;
 }
 
 function getNodeGraphIndex(id) {
