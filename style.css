@@ -81,3 +81,23 @@ body {
     font-size: 22px;
     font-weight: bold;
 }
+
+.highlight {
+    color: white;
+}
+
+.premise {
+    color: green;
+}
+
+.premise.highlight {
+    background-color: green;
+}
+
+.claim {
+    color: orange;
+}
+
+.majorclaim {
+    color: red;
+}

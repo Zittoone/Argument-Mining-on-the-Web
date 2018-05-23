@@ -23,10 +23,6 @@ window.onload = init;
 
 function init() {
     // console.log("page chargee");
-    // remet tout a zero
-    slicedtxt = [];
-    annlines = [];
-    parts = [];
 
     let nodeLink = document.getElementById("nodeUrl");
     let a = document.createElement('a');
@@ -35,6 +31,10 @@ function init() {
     a.title = "graph tool";
     a.href = staticUrl + "NoDE.html";
     nodeLink.appendChild(a);
+
+    document.getElementById("clearButton").addEventListener("click", function(e) {
+        clear();
+    });
 
     // parts [line] [ID,type,indexDebut,indexFin]
 }
@@ -60,6 +60,7 @@ function onFileChange(source) {
             } else if(ext == "txt") {
                 processPlainText(event.target.result);
             }
+            source.disabled = true;
             processContent();
             document.getElementById("titre").textContent = name;
         });
@@ -100,12 +101,23 @@ function processContent() {
     }
 
     for (let line = 0; line < annotated.length; line++) {
-        annotated[line] = annotated[line].split(wsRegex, 4);
+        let split = annotated[line].split(wsRegex, 4);
+        let sentence = annotated[line].substring(split.join(" ").length + 1);
+        annotated[line] = split;
         annotated[line][2] = parseInt(annotated[line][2]);
         annotated[line][3] = parseInt(annotated[line][3]);
+        annotated[line][4] = sentence;
     }
 
     annotated.sort((a, b) => {
+        console.log(a + " " + b);
+        if(!a[0].startsWith("T")) {
+            return -1;
+        }
+
+        if(!b[0].startsWith("T")) {
+            return 1;
+        }
         return a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0;
     })
 
@@ -113,22 +125,24 @@ function processContent() {
     // texte.replace("\n", "");
     // texte.replace("\t", " ");
 
-    let start, end, type, offset = 0;
+    let start, end, type, offset = 0, pre, post;
     for(let line = 0; line < annotated.length; line++) {
         if(annotated[line][0].match("^(T)[0-9]+")) {
 
-            // console.log(annotated[line])
+            console.log(annotated[line])
             //Set vars
             type = annotated[line][1];
+
+            pre = "<span class='" + type.toLowerCase() + "'>";
+            post = "</span>";
+
             start = annotated[line][2] + offset;
+            texte = texte.splice(start, 0, pre);
+            offset += pre.length;
+
             end = annotated[line][3] + offset;
-            offset += 22 + color[type].length;
-
-            console.log(annotated[line])
-            let tmp = texte.substring(start, end);
-            tmp = tmp.fontcolor(color[type]);
-
-            texte = texte.splice(start, end - start, tmp);
+            texte = texte.splice(end, 0, post);
+            offset += post.length;
         }
     }
 
@@ -151,8 +165,21 @@ function readFile(file, callback) {
  */
 function colorizeInputs() {
     if ( texte == undefined || annotated == undefined){
-        document.getElementById('clearButton').disabled = false;
-    }else {
         document.getElementById('clearButton').disabled = true;
+    } else {
+        document.getElementById('clearButton').disabled = false;
     }
+}
+
+function clear() {
+    document.getElementById('clearButton').disabled = true;
+    for(let key in labels) {
+        document.getElementById(key).disabled = false;
+        document.getElementById(key).value = "";
+        document.getElementById(key + "Label").textContent = labels[key];
+    }
+    document.getElementById("titre").textContent = "Fichier";
+    document.getElementById("textOutput").textContent = "";
+    texte = undefined;
+    annotated = undefined;
 }

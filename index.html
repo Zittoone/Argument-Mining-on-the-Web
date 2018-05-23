@@ -32,24 +32,23 @@
                         <div class="legend-color green">
                         </div>
                     </div>
-                    <div class="col-11 legend-value">Premise</div>
+                    <div id="premise" class="col-11 legend-value">Premise</div>
                 </div>
                 <div class="legend-element row">
                     <div class="col-1">
                         <div class="legend-color orange">
                         </div>
                     </div>
-                    <div class="col-11 collegend-value">Claims</div>
+                    <div id="claims" class="col-11 collegend-value">Claims</div>
                 </div>
                 <div class="legend-element row">
                     <div class="col-1">
                         <div class="legend-color red">
                         </div>
                     </div>
-                    <div class="col-11 legend-value">Major claims</div>
+                    <div id="majorclaims" class="col-11 legend-value">Major claims</div>
                 </div>
-                <form style="margin-top: 25px">
-                    <div class="form-group">
+                    <div style="margin-top: 25px" class="form-group">
                         <div class="custom-file">
                             <label class="custom-file-label" for="txtFiles" id="txtFilesLabel">Choisir le fichier texte</label>
                             <input type="file" class="form-control-file is-valid custom-file-input" id="txtFiles" onchange="onFileChange(this)" accept=".txt" >
@@ -62,7 +61,6 @@
                         </div>
                     </div>
                     <button class="btn btn-primary btn-lg btn-block" disabled=true id='clearButton'>Clear</button>
-            </form>
             </div>
         </div>
 </body>
