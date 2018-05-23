@@ -223,6 +223,7 @@ function drawComponents() {
             let node = graph.newNode({
                 label: nodes[i].id,
                 ondoubleclick: function() {
+                    //alert(nodeText);
                     writeText(this.label);
                 }
             });

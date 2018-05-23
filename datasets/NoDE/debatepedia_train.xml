@@ -342,7 +342,7 @@
     </pair>
     <pair task="ARG" id="86" topic="Privatizingsocialsecurity" entailment="YES">
         <t id="11">The program is "pay as you go", meaning current payroll taxes pay for current retirees. Diverting to four percentage points of payroll taxes (or other sources of government funds) to fund private accounts would drive enormous deficits and borrowing ("transition costs"). </t>
-        <h iid="10">Diverting up to four percentage points of the payroll tax to create private accounts as the president has proposed would shorten significantly the time until the Trust Funds become depleted.</h>
+        <h id="10">Diverting up to four percentage points of the payroll tax to create private accounts as the president has proposed would shorten significantly the time until the Trust Funds become depleted.</h>
     </pair>
     <pair task="ARG" id="87" topic="Internetaccess" entailment="YES">
         <t id="2">Internet access is essential now; must be a right. The internet is only that wire that delivers freedom of speech, freedom of assembly, and freedom of the press in a single connection.</t>
