@@ -82,6 +82,8 @@ var color = {
 
 function processContent() {
 
+    colorizeInputs();
+
     // Process only if the buffers are loaded
     if(annotated == undefined || texte == undefined) {
         return;
@@ -123,4 +125,14 @@ function readFile(file, callback) {
     reader.onload = callback;
 
     reader.readAsText(file);
+}
+
+/**
+ * If both undefined : default color
+ * Selecteds are green and non seleted orange
+ * If both inputs match : both green then lock them and activate clear button
+ * else both red
+ */
+function colorizeInputs() {
+
 }
