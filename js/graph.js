@@ -5,6 +5,8 @@ let graphNodes;
 let fatherIds;
 let createdNodeIds;
 
+let hypothesisNumber;
+
 let DEBUG = false;
 
 window.onload = function() {
@@ -99,23 +101,40 @@ function constructNodes(filename, topic) {
     xmlDoc = parser.parseFromString(text,"text/xml");    
 
     let pairs = xmlDoc.getElementsByTagName("pair");
+    
+    let checkPairs = [];
+    
     for (let i = 0; i < pairs.length; i++) { 
         let readTopic = pairs[i].getAttribute("topic");
+        let duplicate = false;
+
         if (readTopic == topic) {
             let id = pairs[i].childNodes[1].getAttribute("id");
             let text = pairs[i].childNodes[1].childNodes[0].nodeValue;
             let fatherId = pairs[i].childNodes[3].getAttribute("id");
             let entailment = pairs[i].getAttribute("entailment");
 
-            if (!fatherIds.includes(fatherId)) {
-               fatherIds.push(fatherId);
+            //We check here if the pair has already been read
+            for (let x = 0; x < checkPairs.length; x++) {
+                if (checkPairs[x][0] === id && checkPairs[x][1] === fatherId) {
+                    console.log("Duplicate found : " + id + " || " + fatherId);
+                    duplicate = true;
+                }
             }
 
-            if (!createdNodeIds.includes(id)) {
-                createdNodeIds.push(id);
-            }
+            if (!duplicate) {
+                checkPairs.push([id, fatherId]);
 
-            nodes.push(new Node(id, text, fatherId, entailment));
+                if (!fatherIds.includes(fatherId)) {
+                fatherIds.push(fatherId);
+                }
+
+                if (!createdNodeIds.includes(id)) {
+                    createdNodeIds.push(id);
+                }
+
+                nodes.push(new Node(id, text, fatherId, entailment));
+            }
         }
     }
 
@@ -125,9 +144,12 @@ function constructNodes(filename, topic) {
 }
 
 function seekHypothesis(filename, topic) {
+    hypothesisNumber = 0;
+    
     for (let i = 0; i < fatherIds.length; i++) {
         if (!createdNodeIds.includes(fatherIds[i])) {
             createHypothesis(filename, topic, fatherIds[i]);
+            hypothesisNumber++;
         }
     }
 }
@@ -165,22 +187,32 @@ function drawGraph() {
 
     //Adding nodes
     for(let i = 0; i < nodes.length; i++) {
-        let nodeText = nodes[i].text;
-        let node = graph.newNode({
-            label: nodes[i].id,
-            ondoubleclick: function() {
-                writeText(this.label);
+        let duplicate = false;
+
+        for (let y = 0; y < graphNodes.length; y++) {
+            if (graphNodes[y].data.label == nodes[i].id) {
+                duplicate = true;
             }
-        });
+        }
 
-        graphNodes.push(node);
+        if (!duplicate) {
+            let nodeText = nodes[i].text;
+            let node = graph.newNode({
+                label: nodes[i].id,
+                ondoubleclick: function() {
+                    writeText(this.label);
+                }
+            });
+
+            graphNodes.push(node);
+        }
     }
-
+    
     //Adding edges
-    for(let i = 1; i < nodes.length; i++) {
+    for(let i = hypothesisNumber; i < nodes.length; i++) {
         let currentNode, fatherNode, color;
 
-        currentNode = graphNodes[i];
+        currentNode = graphNodes[getNodeGraphIndex(nodes[i].id)];
         fatherNode = graphNodes[getNodeGraphIndex(nodes[i].fatherId)];
 
         if (nodes[i].entailment == "YES" || nodes[i].entailment == "ENTAILMENT") {
@@ -188,10 +220,8 @@ function drawGraph() {
         } else {
             edgeColor = '#FF0000';
         }
-
         graph.newEdge(currentNode, fatherNode, {color: edgeColor});
     }
-
 
     jQuery(function(){
         var springy = jQuery('#canvasSpringy').springy({
@@ -204,12 +234,22 @@ function writeText(id) {
     let textDiv = document.getElementById("nodeText");
 
     document.getElementById("textTitle").innerHTML = "Text from node " + id;
-    let text = nodes[getNodeGraphIndex(id)].text;
+    let text = nodes[getNodeIndex(id)].text;
 
     textDiv.innerHTML = text;
 }
 
 function getNodeGraphIndex(id) {
+    let index = -1;
+    for(let i = 0; i < graphNodes.length; i++) {
+        if (graphNodes[i].data.label == id) {
+            index = i;
+        }
+    }
+    return index;
+}
+
+function getNodeIndex(id) {
     let index = -1;
     for(let i = 0; i < nodes.length; i++) {
         if (nodes[i].id == id) {
