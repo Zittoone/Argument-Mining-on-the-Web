@@ -8,28 +8,42 @@
         crossorigin="anonymous"></script>
     <script src="lib/springy.js"></script>
     <script src="lib/springyui.js"></script>
+    <script src="js/conf.js"></script>
     <script src="js/graph.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" media="all" />
 </head>
 
 <body>
 
 </body>
 
+<div id="back">
+
+</div>
+
 <div id="buttons">
-    <button class="btn btn-primary" onclick="getTopic('debatepedia_test.xml')">debatepedia_test</button>
-    <button class="btn btn-primary" onclick="getTopic('debatepedia_train.xml')">debatepedia_train</button>
-    <button class="btn btn-primary" onclick="getTopic('procon.xml')">procon</button>
+    <div class="row">
+        <div class="nodeButtons">
+            <button class="btn btn-primary" onclick="getTopic('debatepedia_test.xml')">debatepedia_test</button>
+        </div>
+        <div class="nodeButtons">
+            <button class="btn btn-primary" onclick="getTopic('debatepedia_train.xml')">debatepedia_train</button>
+        </div>
+        <div class="nodeButtons">
+            <button class="btn btn-primary" onclick="getTopic('procon.xml')">procon</button>
+        </div>
+    </div>
 </div>
 
 <div id="topics" item-height="500px">
-
 </div>
 
 <div id="graph">
     <canvas id="canvasSpringy" width="640" height="480" />
 </div>
 
-<div id="text">
+<h2 id="textTitle"></h2>
+<div id="nodeText">
 
 </div>
 

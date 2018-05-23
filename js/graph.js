@@ -7,11 +7,15 @@ let createdNodeIds;
 
 let DEBUG = false;
 
-let getUrl = window.location;
-let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-let datasetsNoDEUrl = baseUrl + "/datasets/NoDE/";
-
-let staticUrl = "http://localhost/datasets/NoDE/";
+window.onload = function() {
+    let back = document.getElementById("back");
+    let a = document.createElement('a');
+    let text = document.createTextNode("<< Home page");
+    a.appendChild(text);
+    a.title = "home";
+    a.href = staticUrl;
+    back.appendChild(a);
+}
 
 function readTextFile(file)
 {
@@ -40,7 +44,7 @@ function getTopic(filename) {
     topics = [];
 
 
-    let file = staticUrl + filename;
+    let file = nodeURL + filename;
     let text = readTextFile(file);
 
     let parser, xmlDoc;
@@ -86,7 +90,7 @@ function constructNodes(filename, topic) {
     fatherIds = [];
     createdNodeIds = [];
 
-    let file = staticUrl + filename;
+    let file = nodeURL + filename;
     let text = readTextFile(file);
 
     let parser, xmlDoc;
@@ -129,7 +133,7 @@ function seekHypothesis(filename, topic) {
 }
 
 function createHypothesis(filename, topic, id) {
-    let file = staticUrl + filename;
+    let file = nodeURL + filename;
     let text = readTextFile(file);
 
     let parser, xmlDoc;
@@ -197,8 +201,9 @@ function drawGraph() {
 }
 
 function writeText(id) {
-    let textDiv = document.getElementById("text");
+    let textDiv = document.getElementById("nodeText");
 
+    document.getElementById("textTitle").innerHTML = "Text from node " + id;
     let text = nodes[getNodeGraphIndex(id)].text;
 
     textDiv.innerHTML = text;
