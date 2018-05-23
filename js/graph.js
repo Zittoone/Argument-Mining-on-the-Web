@@ -2,6 +2,9 @@ let topics;
 let nodes;
 let graphNodes;
 
+let graph;
+let renderer;
+
 let fatherIds;
 let createdNodeIds;
 
@@ -185,7 +188,24 @@ function createHypothesis(filename, topic, id) {
 }
 
 function drawGraph() {
-    let graph = new Springy.Graph();
+    if (renderer) {
+        renderer.graph.edges.slice().map(function(edge) {
+            renderer.graph.removeEdge(edge);
+        });
+        renderer.graph.nodes.slice().map(function(node) {
+            renderer.graph.removeNode(node);
+        });
+        drawComponents();
+    } else {
+        graph = new Springy.Graph();
+        drawComponents();
+        renderer = $('#canvasSpringy').springy({
+           graph: graph
+        });
+    }
+}
+
+function drawComponents() {
     graphNodes = [];
 
     //Adding nodes
@@ -225,12 +245,6 @@ function drawGraph() {
         }
         graph.newEdge(currentNode, fatherNode, {color: edgeColor});
     }
-
-    jQuery(function(){
-        var springy = jQuery('#canvasSpringy').springy({
-          graph: graph
-        });
-      });
 }
 
 function writeText(id) {
@@ -270,7 +284,3 @@ class Node {
         this.entailment = entailment;
     }
 }
-
-//getTopic("debatepedia_test.xml");
-//constructNodes("debatepedia_test.xml", "Cellphones");
-//drawGraph();
