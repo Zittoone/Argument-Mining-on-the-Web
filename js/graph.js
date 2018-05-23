@@ -99,6 +99,9 @@ function constructNodes(filename, topic) {
     xmlDoc = parser.parseFromString(text,"text/xml");    
 
     let pairs = xmlDoc.getElementsByTagName("pair");
+    
+    let checkPairs = [];
+    
     for (let i = 0; i < pairs.length; i++) { 
         let readTopic = pairs[i].getAttribute("topic");
         if (readTopic == topic) {
@@ -106,6 +109,22 @@ function constructNodes(filename, topic) {
             let text = pairs[i].childNodes[1].childNodes[0].nodeValue;
             let fatherId = pairs[i].childNodes[3].getAttribute("id");
             let entailment = pairs[i].getAttribute("entailment");
+
+            //We check here if the pair has already been read
+            for (let x = 0; x < checkPairs.length; x++) {
+                if (checkPairs[x][0] === id && checkPairs[x][1] === fatherId) {
+                    console.log("Duplicate found : " + id + " || " + fatherId);
+                    return;
+                }
+            }
+
+            console.log("ijfpiojdqpdj")
+
+            if (fatherId === "15") {
+                console.log(id);
+            }
+
+            checkPairs.push([id, fatherId]);
 
             if (!fatherIds.includes(fatherId)) {
                fatherIds.push(fatherId);
