@@ -109,13 +109,14 @@ function processContent() {
         let split = annotated[line].split(wsRegex, 4);
         let sentence = annotated[line].substring(split.join(" ").length + 1);
         annotated[line] = split;
+        if (!annotated[line][0].match("^(T)[0-9]+"))
+            continue;
         annotated[line][2] = parseInt(annotated[line][2]);
         annotated[line][3] = parseInt(annotated[line][3]);
         annotated[line][4] = sentence;
     }
 
     annotated.sort((a, b) => {
-        console.log(a + " " + b);
         if (!a[0].startsWith("T")) {
             return -1;
         }
@@ -134,12 +135,10 @@ function processContent() {
         pre, post;
     for (let line = 0; line < annotated.length; line++) {
         if (annotated[line][0].match("^(T)[0-9]+")) {
-
-            console.log(annotated[line])
-                //Set vars
+            //Set vars
             type = annotated[line][1];
 
-            pre = "<span class='" + type.toLowerCase() + "'>";
+            pre = "<span id='" + annotated[line][0] + "' class='" + type.toLowerCase() + "'>";
             post = "</span>";
 
             start = annotated[line][2] + offset;
@@ -153,6 +152,25 @@ function processContent() {
     }
 
     document.getElementById('textOutput').innerHTML = texte;
+
+    for (let line = 0; line < annotated.length; line++) {
+        if (annotated[line][0].match("^(R)[0-9]+")) {
+
+            let type = annotated[line][1];
+            let arg1 = document.getElementById(annotated[line][2].split(":")[1]);
+            let arg2 = annotated[line][3].split(":")[1];
+            arg1.addEventListener('mouseover', function(evt) {
+                document.getElementById(arg2).classList.add(type.toLowerCase());
+                arg1.classList.add("argument");
+            });
+
+            arg1.addEventListener('mouseout', function(evt) {
+                document.getElementById(arg2).classList.remove(type.toLowerCase());
+                arg1.classList.remove("argument");
+            });
+
+        }
+    }
 }
 
 function readFile(file, callback) {

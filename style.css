@@ -7,7 +7,6 @@ body {
     text-align: justify;
     font-family: 'Times New Roman', Times, serif;
     font-size: 19px;
-    
 }
 
 #searchInput {
@@ -20,11 +19,12 @@ body {
     border: none;
     border-bottom: 1px solid #ddd;
 }
-#searchInput:focus {outline: 3px solid #ddd;}
 
-.legend-element {
-
+#searchInput:focus {
+    outline: 3px solid #ddd;
 }
+
+.legend-element {}
 
 .legend-color {
     border: black solid 1px;
@@ -44,12 +44,33 @@ body {
     background: orange;
 }
 
-.legend-value {
+.legend-value {}
 
+.legend-value.red {
+    color: red;
 }
 
+.legend-value.green {
+    color: green;
+}
 
-.show {display:block;}
+.legend-value>.green-highlight {
+    background-color: green;
+    color: white;
+}
+
+.legend-value>.red-highlight {
+    background-color: red;
+    color: white;
+}
+
+green-highlight .legend-value.orange {
+    color: orange;
+}
+
+.show {
+    display: block;
+}
 
 #buttons {
     margin-top: 20px;
@@ -77,7 +98,7 @@ body {
 }
 
 .titles {
-    padding-left : 15px;
+    padding-left: 15px;
     font-size: 22px;
     font-weight: bold;
 }
@@ -104,4 +125,18 @@ body {
 
 #topics {
     padding-bottom: 15px;
+}
+
+.argument {
+    text-decoration: underline;
+}
+
+.attacks {
+    color: white;
+    background-color: red;
+}
+
+.supports {
+    color: white;
+    background-color: green;
 }
