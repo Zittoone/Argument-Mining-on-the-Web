@@ -150,5 +150,9 @@ function readFile(file, callback) {
  * else both red
  */
 function colorizeInputs() {
-
+    if ( texte == undefined || annotated == undefined){
+        document.getElementById('clearButton').disabled = false;
+    }else {
+        document.getElementById('clearButton').disabled = true;
+    }
 }
