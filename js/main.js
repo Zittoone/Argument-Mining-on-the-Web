@@ -140,5 +140,5 @@ function readFile(file, callback) {
  * else both red
  */
 function colorizeInputs() {
-
+    
 }

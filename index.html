@@ -17,10 +17,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-11 col-md-8" id='titre'>titre</div>
-            <div class="col-1">
-                <button class="btn btn-primary btn-lg" id="treat" onclick='annotate()'> Treat</button>
-            </div>
+            <div class="col-12 col-md-8" id='titre'><h3>Fichier</h3></div>
         </div>
         <div class="row">
             <div id="text" class="col-md-8 col-sm-12 border-right border-top">
@@ -49,26 +46,21 @@
                     </div>
                     <div class="col-11 legend-value">Major claims</div>
                 </div>
-                <!-- browse text button-->
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                       <!-- <button class="btn btn-outline-secondary" type="button" onclick="printdoc('txt')">Show</button> -->
+                <form style="margin-top: 25px">
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <label class="custom-file-label" for="txtFiles" id="txtFilesLabel">Choisir le fichier texte</label>
+                            <input type="file" class="form-control-file is-valid custom-file-input" id="txtFiles" onchange="onFileChange(this)" accept=".txt" >
+                        </div>
                     </div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="txtFiles" onchange="onFileChange(this)" accept=".txt" >
-                        <label class="custom-file-label" for="txtFiles" id="txtFilesLabel">Choisir le fichier texte</label>
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <label class="custom-file-label" for="annFiles" id="annFilesLabel">Choisir le fichier annoté</label>
+                            <input type="file" class="form-control-file custom-file-input" id="annFiles" onchange="onFileChange(this)" accept=".ann" >
+                        </div>
                     </div>
-                </div>
-                <!-- browse ann button -->
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <!--<button class="btn btn-outline-secondary" type="button" onclick="printdoc('ann')">Show</button> -->
-                    </div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="annFiles" onchange="onFileChange(this)" accept=".ann" >
-                        <label class="custom-file-label" for="annFiles" id="annFilesLabel">Choisir le fichier annoté</label>
-                    </div>
-                </div>
+                    <button class="btn btn-primary btn-lg">Clear</button>
+            </form>
             </div>
         </div>
 </body>
