@@ -24,7 +24,7 @@
         </div>
         <div class="row">
             <div id="text" class="col-md-8 col-sm-12 border-right border-top">
-                <div id="textOutput"></div>
+                <div class="" id="textOutput"></div>
             </div>
             <div class="col-md-4 col-sm-12">
                 <div class="legend">Légende :</div>
@@ -52,21 +52,21 @@
                 <!-- browse text button-->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button" onclick="printdoc('txt')">Show</button>
+                       <!-- <button class="btn btn-outline-secondary" type="button" onclick="printdoc('txt')">Show</button> -->
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="txtFiles" oninput="printdoc('txt')" >
-                        <label class="custom-file-label" for="txtFiles" id="txtFilesLabel">Choose txt file</label>
+                        <input type="file" class="custom-file-input" id="txtFiles" onchange="onFileChange(this)" accept=".txt" >
+                        <label class="custom-file-label" for="txtFiles" id="txtFilesLabel">Choisir le fichier texte</label>
                     </div>
                 </div>
-                <!-- browse ann button-->
+                <!-- browse ann button -->
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button" onclick="printdoc('ann')">Show</button>
+                        <!--<button class="btn btn-outline-secondary" type="button" onclick="printdoc('ann')">Show</button> -->
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="annFiles" oninput="printdoc('ann')" >
-                        <label class="custom-file-label" for="annFiles" id="annFilesLabel">Choose ann file</label>
+                        <input type="file" class="custom-file-input" id="annFiles" onchange="onFileChange(this)" accept=".ann" >
+                        <label class="custom-file-label" for="annFiles" id="annFilesLabel">Choisir le fichier annoté</label>
                     </div>
                 </div>
             </div>
