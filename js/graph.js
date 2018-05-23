@@ -1,12 +1,17 @@
-let topics = [];
-let nodes = [];
-let graphNodes = [];
+let topics;
+let nodes;
+let graphNodes;
+
+let fatherIds;
+let currentIds;
 
 let DEBUG = false;
 
 let getUrl = window.location;
 let baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 let datasetsNoDEUrl = baseUrl + "/datasets/NoDE/";
+
+let staticUrl = "http://localhost/datasets/NoDE/";
 
 function readTextFile(file)
 {
@@ -32,7 +37,11 @@ function readTextFile(file)
 
 //List all topics found in the file
 function getTopic(filename) {
-    let text = readTextFile(filename);
+    topics = [];
+
+
+    let file = staticUrl + filename;
+    let text = readTextFile(file);
 
     let parser, xmlDoc;
 
@@ -40,10 +49,31 @@ function getTopic(filename) {
     xmlDoc = parser.parseFromString(text,"text/xml");
 
     let pairs = xmlDoc.getElementsByTagName("pair");
+
+    let textDiv = document.getElementById("text");
+    //We remove topics of previous files
+    while (textDiv.firstChild) {
+        textDiv.removeChild(textDiv.firstChild);
+      }
+
     for (let i = 0; i < pairs.length; i++) { 
         let topic = pairs[i].getAttribute("topic");
+
         if (!topics.includes(topic)) {
             topics.push(topic);
+
+            //Adding link
+            let link = document.createElement('a');
+            let text = document.createTextNode(topic);
+            link.appendChild(text);
+            link.title = topic;
+            link.href = 'javascript:constructNodes("' + filename + '", "' + topic + '");';
+            textDiv.appendChild(link);
+            //Adding br
+
+            let br = document.createElement('br');
+            textDiv.appendChild(br);
+
             if (DEBUG) {
                 console.log(topic);
             }
@@ -52,26 +82,38 @@ function getTopic(filename) {
 }
 
 function constructNodes(filename, topic) {
-    let text = readTextFile(filename);
+    nodes = [];
+    fatherIds = [];
+    currentIds = [];
+
+    let file = staticUrl + filename;
+    let text = readTextFile(file);
 
     let parser, xmlDoc;
 
-    let test = 0;
+    let hypothesisFound = false;
 
     parser = new DOMParser();
     xmlDoc = parser.parseFromString(text,"text/xml");    
-
-    let hypothesisFound = false;
 
     let pairs = xmlDoc.getElementsByTagName("pair");
     for (let i = 0; i < pairs.length; i++) { 
         let readTopic = pairs[i].getAttribute("topic");
         if (readTopic == topic) {
-            test++;
             let id = pairs[i].childNodes[1].getAttribute("id");
             let text = pairs[i].childNodes[1].childNodes[0].nodeValue;
             let fatherId = pairs[i].childNodes[3].getAttribute("id");
             let entailment = pairs[i].getAttribute("entailment");
+
+            if (!fatherIds.includes(fatherId)) {
+                console.log("add :" + fatherId)
+               fatherIds.push(fatherId);
+            }
+
+            if (!currentIds.includes(id)) {
+                currentIds.push(id);
+            }
+
             
             if (!hypothesisFound && pairs[i].childNodes[3].getAttribute("id") == "1") {
                 nodes.push(new Node("1", 
@@ -79,14 +121,56 @@ function constructNodes(filename, topic) {
                                 ));
                 hypothesisFound = true;
             }
+            
 
             nodes.push(new Node(id, text, fatherId, entailment));
         }
+    }
+
+    //createHypothesis();
+
+    drawGraph();
+}
+
+function createHypothesis() {
+    console.log(currentIds.length);
+    console.log(fatherIds.length)
+
+    for (let i = 0; i < fatherIds.length; i++) {
+        console.log(fatherIds[i])
+        //if (!currentIds.include(fatherIds[i])) {
+            
+        //}
+    }
+}
+
+function seekText(filename, topic, id) {
+    let file = staticUrl + filename;
+    let text = readTextFile(file);
+
+    let parser, xmlDoc;
+
+    parser = new DOMParser();
+    xmlDoc = parser.parseFromString(text,"text/xml"); 
+
+    let pairs = xmlDoc.getElementsByTagName("pair");
+    for (let i = 0; i < pairs.length; i++) { 
+        let readTopic = pairs[i].getAttribute("topic");
+
+        if (readTopic == topic && pairs[i].childNodes[3].getAttribute("id") == id) {
+            nodes.push(new Node(pairs[i].childNodes[3].getAttribute("id"), 
+                                pairs[i].childNodes[3].childNodes[0].nodeValue
+            ));
+        }
+
+        return;
+
     }
 }
 
 function drawGraph() {
     let graph = new Springy.Graph();
+    graphNodes = [];
 
     //Adding nodes
     for(let i = 0; i < nodes.length; i++) {
@@ -108,12 +192,13 @@ function drawGraph() {
         currentNode = graphNodes[i];
         fatherNode = graphNodes[getNodeGraphIndex(nodes[i].fatherId)];
 
-
-        if (nodes[i].entailment == "YES") {
+        if (nodes[i].entailment == "YES" || nodes[i].entailment == "ENTAILMENT") {
             edgeColor = '#7DBE3C'
         } else {
             edgeColor = '#FF0000';
         }
+
+        console.log(currentNode == undefined)
 
         graph.newEdge(currentNode, fatherNode, {color: edgeColor});
     }
@@ -146,6 +231,6 @@ class Node {
     }
 }
 
-getTopic("http://localhost/datasets/NoDE/debatepedia_test.xml");
-constructNodes("http://localhost/datasets/NoDE/debatepedia_test.xml", "Cellphones");
-drawGraph();
+//getTopic("debatepedia_test.xml");
+//constructNodes("debatepedia_test.xml", "Cellphones");
+//drawGraph();
