@@ -76,7 +76,7 @@ body {
     font-size: 20px;
 }
 
-#textTitle {
+.titles {
     padding-left : 15px;
     font-size: 22px;
     font-weight: bold;
@@ -100,4 +100,8 @@ body {
 
 .majorclaim {
     color: red;
+}
+
+#topics {
+    padding-bottom: 15px;
 }

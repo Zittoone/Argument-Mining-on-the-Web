@@ -45,7 +45,6 @@ function readTextFile(file)
 function getTopic(filename) {
     topics = [];
 
-
     let file = nodeURL + filename;
     let text = readTextFile(file);
 
@@ -55,6 +54,8 @@ function getTopic(filename) {
     xmlDoc = parser.parseFromString(text,"text/xml");
 
     let pairs = xmlDoc.getElementsByTagName("pair");
+
+    document.getElementById("topicTitle").innerHTML = "Topics for the file " + filename;
 
     let topicDiv = document.getElementById("topics");
     //We remove topics of previous files
@@ -139,6 +140,8 @@ function constructNodes(filename, topic) {
     }
 
     seekHypothesis(filename, topic);
+
+    document.getElementById("graphTitle").innerHTML = "Graph for topic " + topic;
 
     drawGraph();
 }
