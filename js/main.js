@@ -91,7 +91,13 @@ function processContent() {
 
     for (let line = 0; line < annotated.length; line++) {
         annotated[line] = annotated[line].split(wsRegex, 4);
+        annotated[line][2] = parseInt(annotated[line][2]);
+        annotated[line][3] = parseInt(annotated[line][3]);
     }
+
+    annotated.sort((a, b) => {
+        return a[2] > b[2] ? 1 : a[2] < b[2] ? -1 : 0;
+    })
 
     // sanitize and slice text into char array
     // texte.replace("\n", "");
@@ -104,8 +110,8 @@ function processContent() {
             // console.log(annotated[line])
             //Set vars
             type = annotated[line][1];
-            start = parseInt(annotated[line][2]) + offset;
-            end = parseInt(annotated[line][3]) + offset;
+            start = annotated[line][2] + offset;
+            end = annotated[line][3] + offset;
             offset += 22 + color[type].length;
 
             console.log(annotated[line])
